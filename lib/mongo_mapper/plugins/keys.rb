@@ -87,7 +87,7 @@ module MongoMapper
           end
 
           def create_accessors_for(key)
-            unless key !~ /^\w[\w\d_]*$/ then
+            unless key.name !~ /^\w[\w\d_]*$/ then
               accessors_module.module_eval <<-end_eval
                 def #{key.name}
                   read_key(:#{key.name})
