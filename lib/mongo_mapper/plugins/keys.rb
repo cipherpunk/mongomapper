@@ -87,25 +87,27 @@ module MongoMapper
           end
 
           def create_accessors_for(key)
-            accessors_module.module_eval <<-end_eval
-              def #{key.name}
-                read_key(:#{key.name})
-              end
+            unless key !~ /^\w[\w\d_]*$/ then
+              accessors_module.module_eval <<-end_eval
+                def #{key.name}
+                  read_key(:#{key.name})
+                end
 
-              def #{key.name}_before_typecast
-                read_key_before_typecast(:#{key.name})
-              end
+                def #{key.name}_before_typecast
+                  read_key_before_typecast(:#{key.name})
+                end
 
-              def #{key.name}=(value)
-                write_key(:#{key.name}, value)
-              end
+                def #{key.name}=(value)
+                  write_key(:#{key.name}, value)
+                end
 
-              def #{key.name}?
-                read_key(:#{key.name}).present?
-              end
-            end_eval
+                def #{key.name}?
+                  read_key(:#{key.name}).present?
+                end
+              end_eval
 
-            include accessors_module
+              include accessors_module
+            end
           end
 
           def create_key_in_descendants(*args)
